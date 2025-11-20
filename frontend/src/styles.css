@@ -4,3 +4,8 @@ form input, form textarea, form select{width:100%;padding:8px;margin:6px 0;borde
 .task{border:1px solid #eee;padding:10px;border-radius:6px;margin:8px 0}
 .header{background:#24292f;color:#fff;padding:12px}
 .header a{color:#fff;margin-right:10px}
+
+/* keep card-like containers white, but inside header the container should be transparent */
+.header .container{background:transparent;padding:0;display:flex;align-items:center}
+.header .container a{color:#fff}
+.header button{background:transparent;border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 10px;border-radius:4px;cursor:pointer}

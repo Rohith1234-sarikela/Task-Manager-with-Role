@@ -6,6 +6,8 @@ const api = axios.create({
 
 api.interceptors.request.use(cfg => {
   const token = localStorage.getItem('token')
+  // debug: log whether token exists when sending requests
+  try { console.debug('API request', cfg.method, cfg.url, 'hasToken=', !!token) } catch (e) {}
   if (token) cfg.headers.Authorization = `Bearer ${token}`
   return cfg
 })

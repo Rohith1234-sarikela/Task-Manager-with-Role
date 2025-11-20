@@ -1,18 +1,32 @@
 import React, { useState } from 'react'
 import api from '../services/api'
+import { useNavigate } from 'react-router-dom'
 
 export default function TaskForm({ onSaved }){
   const [form, setForm] = useState({ title:'', description:'', status:'pending' })
   const [msg, setMsg] = useState('')
+  const navigate = useNavigate()
+
   const submit = async e => {
     e.preventDefault()
+    const token = localStorage.getItem('token')
+    if (!token) {
+      setMsg('You must be logged in to create a task. Redirecting to login...')
+      setTimeout(()=>navigate('/login'), 900)
+      return
+    }
     try{
       await api.post('/tasks', form)
       setForm({ title:'', description:'', status:'pending' })
       setMsg('Saved')
       if (onSaved) onSaved()
-    }catch(err){ setMsg(err?.response?.data?.message || 'Error') }
+    }catch(err){
+      const serverMsg = err?.response?.data?.message
+      setMsg(serverMsg || 'Error saving task')
+      console.error('Task save error', err)
+    }
   }
+
   return (
     <div style={{marginTop:12}}>
       <form onSubmit={submit} className="container">
