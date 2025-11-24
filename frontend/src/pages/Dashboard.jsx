@@ -1,50 +1,75 @@
-import React, { useEffect, useState } from 'react'
-import api from '../services/api'
-import TaskForm from './TaskForm'
+import { useEffect, useState } from "react";
+import TaskForm from "../components/TaskForm";
+import api from "../services/api";
+import "./dashboard.css";
 
-export default function Dashboard(){
-  const [tasks, setTasks] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [q, setQ] = useState('')
+export default function Dashboard() {
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchTasks = async () => {
-    setLoading(true)
-    try{
-      const res = await api.get('/api/tasks', { params: { q } })
-      setTasks(res.data.tasks)
-    }catch(err){ console.error(err) }
-    setLoading(false)
-  }
+    try {
+      const res = await api.get("/api/tasks");
+      setTasks(res.data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+      alert("Failed to load tasks");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  useEffect(()=>{ fetchTasks() }, [q])
+  const deleteTask = async (id) => {
+    try {
+      await api.delete(`/api/tasks/${id}`);
+      fetchTasks();
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("Failed to delete task");
+    }
+  };
 
-  const del = async (id) => {
-    if(!confirm('Delete task?')) return
-    try{
-      await api.delete(`/api/tasks/${id}`)
-      fetchTasks()
-    }catch(err){ console.error(err) }
-  }
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   return (
-    <div className="container">
-      <h2>Dashboard</h2>
-      <TaskForm onSaved={fetchTasks} />
-      <div style={{marginTop:12}}>
-        <input placeholder="Search title" value={q} onChange={e=>setQ(e.target.value)} />
+    <div className="dash-container">
+      <h1 className="dash-title">Dashboard</h1>
+
+      <div className="form-section">
+        <TaskForm onSaved={fetchTasks} />
       </div>
-      {loading ? <p>Loading...</p> : (
-        tasks.map(t => (
-          <div key={t._id} className="task">
-            <strong>{t.title}</strong>
-            <p>{t.description}</p>
-            <small>Status: {t.status} | By: {t.createdBy?.name || 'You'}</small>
-            <div>
-              <button onClick={()=>del(t._id)} style={{marginLeft:8}}>Delete</button>
-            </div>
+
+      <h2 className="task-heading">Tasks</h2>
+
+      {loading && <p className="loading">Loading...</p>}
+
+      <div className="task-list">
+        {tasks.map((task) => (
+          <div className="task-card" key={task._id}>
+            <h3>{task.title}</h3>
+            <p>{task.description}</p>
+
+            <p className="status">
+              Status: <span className={`badge ${task.status}`}>
+                {task.status}
+              </span>
+            </p>
+
+            <button
+              className="delete-btn"
+              onClick={() => deleteTask(task._id)}
+            >
+              Delete
+            </button>
           </div>
-        ))
-      )}
+        ))}
+
+        {!loading && tasks.length === 0 && (
+          <p className="no-task">No tasks yet</p>
+        )}
+      </div>
     </div>
-  )
+  );
 }
