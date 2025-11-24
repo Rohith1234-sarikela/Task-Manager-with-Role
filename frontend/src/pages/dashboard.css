@@ -1,0 +1,90 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f5f7fa;
+}
+
+.dash-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px;
+}
+
+.dash-title {
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.task-heading {
+  margin-top: 30px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.task-list {
+  margin-top: 20px;
+}
+
+.task-card {
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  margin-bottom: 16px;
+  animation: fadeIn 0.4s ease-out;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.task-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.delete-btn {
+  background: #ff4d4d;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  font-weight: 600;
+}
+
+.delete-btn:hover {
+  background: #e00000;
+  transform: scale(1.05);
+}
+
+.no-task, .loading {
+  text-align: center;
+  color: #666;
+  margin-top: 20px;
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge.pending {
+  background: #ffe066;
+  color: #6a5d00;
+}
+
+.badge.in-progress {
+  background: #74c0fc;
+  color: #003b70;
+}
+
+.badge.completed {
+  background: #69db7c;
+  color: #004d1a;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
