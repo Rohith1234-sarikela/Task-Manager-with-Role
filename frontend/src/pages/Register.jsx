@@ -4,14 +4,18 @@ import api from '../services/api'
 export default function Register(){
   const [form, setForm] = useState({ name:'', email:'', password:'' })
   const [msg, setMsg] = useState('')
+
   const submit = async e => {
     e.preventDefault()
     try{
-      await api.post('/register', form)
-      setMsg('Registered. You can now login.')
+      await api.post('/api/register', form)
+      setMsg('Registered successfully. You can now login.')
       setForm({ name:'', email:'', password:'' })
-    }catch(err){ setMsg(err?.response?.data?.message || 'Error') }
+    }catch(err){ 
+      setMsg(err?.response?.data?.message || 'Error') 
+    }
   }
+
   return (
     <div className="container">
       <h2>Register</h2>

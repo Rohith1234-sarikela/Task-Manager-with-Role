@@ -10,7 +10,7 @@ export default function Dashboard(){
   const fetchTasks = async () => {
     setLoading(true)
     try{
-      const res = await api.get('/tasks', { params: { q } })
+      const res = await api.get('/api/tasks', { params: { q } })
       setTasks(res.data.tasks)
     }catch(err){ console.error(err) }
     setLoading(false)
@@ -20,8 +20,10 @@ export default function Dashboard(){
 
   const del = async (id) => {
     if(!confirm('Delete task?')) return
-    await api.delete(`/tasks/${id}`)
-    fetchTasks()
+    try{
+      await api.delete(`/api/tasks/${id}`)
+      fetchTasks()
+    }catch(err){ console.error(err) }
   }
 
   return (

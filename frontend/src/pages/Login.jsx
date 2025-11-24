@@ -1,20 +1,24 @@
 import React, { useState } from 'react'
 import api from '../services/api'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function Login(){
   const [form, setForm] = useState({ email:'', password:'' })
   const [msg, setMsg] = useState('')
   const navigate = useNavigate()
+
   const submit = async e => {
     e.preventDefault()
     try{
-      const res = await api.post('/login', form)
+      const res = await api.post('/api/login', form)
       localStorage.setItem('token', res.data.token)
       localStorage.setItem('user', JSON.stringify(res.data.user))
       navigate('/dashboard')
-    }catch(err){ setMsg(err?.response?.data?.message || 'Error') }
+    }catch(err){ 
+      setMsg(err?.response?.data?.message || 'Error') 
+    }
   }
+
   return (
     <div className="container">
       <h2>Login</h2>
@@ -24,6 +28,10 @@ export default function Login(){
         <button type="submit">Login</button>
       </form>
       {msg && <p>{msg}</p>}
+      
+      <p style={{marginTop: 12}}>
+        New user? <Link to="/register">Create an account</Link>
+      </p>
     </div>
   )
 }
